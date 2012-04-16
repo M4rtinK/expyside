@@ -2,25 +2,21 @@
 
 # A simple PySide example
 
-# enable running with absolute path
+import sys
 import os
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-
-QML_FILE_NAME = None
-WINDOW_TITLE = "PySide Example"
-
-from PySide.QtCore import *
 from PySide.QtGui import *
 from PySide.QtDeclarative import *
 
+WINDOW_TITLE = "PySide Example"
 
+# enable running this program from absolute path
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-import sys
 if __name__ == '__main__':
-  app = QApplication(sys.argv)
-  f = QDeclarativeView()
-  f.setSource("main.qml")
-  f.setWindowTitle(WINDOW_TITLE)
-  f.show()
+  app = QApplication(sys.argv) # create the application
+  view = QDeclarativeView() # create the declarative view
+  view.setSource("main.qml")
+  view.setWindowTitle(WINDOW_TITLE)
+  view.resize(854,480)
+  view.show()
   app.exec_()
