@@ -20,9 +20,9 @@ class PropertyExample(QObject):
   """
   Python property provider
   """
-  def __init__(self, rootObject):
+  def __init__(self):
     QObject.__init__(self)
-    self.rootObject = rootObject
+    self.rootObject = None
     #NOTE: the root object is needed only by Python properties
     # that call QML code directly
 
@@ -76,9 +76,9 @@ if __name__ == '__main__':
   # add Python properties to the
   # QML root context
   rc = view.rootContext()
-  rootObject = view.rootObject()
   # add the example property
-  rc.setContextProperty("example", PropertyExample(rootObject))
+  property = PropertyExample()
+  rc.setContextProperty("example", property)
 
   # register image providers
   # NOTE: the image provider name in the Image.source URL is automatically lower-cased !!
@@ -88,9 +88,12 @@ if __name__ == '__main__':
   # doesn't work for some reason
 
   view.setSource("main.qml")
+  rootObject = view.rootObject()
+  property.rootObject = rootObject
 
   view.setWindowTitle(WINDOW_TITLE)
-  view.resize(854,480)
+  view.resize(480,854)
+  #view.resize(854,480)
   view.show()
   app.exec_()
 
