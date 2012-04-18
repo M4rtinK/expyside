@@ -25,7 +25,7 @@ Window {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width : 200
                 //height : 200
-                source : "image://python" + entryField.text
+                source : "image://fromPython" + entryField.text
             }
             TextField {
                 anchors.horizontalCenter: parent.horizontalCenter
