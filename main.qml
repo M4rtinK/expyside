@@ -9,7 +9,8 @@ Window {
         anchors.fill : parent
     }
     Flickable {
-        anchors.centerIn : parent
+        anchors.fill : parent
+        //anchors.centerIn : parent
         Column {
             spacing : 16
             Text {
@@ -17,22 +18,24 @@ Window {
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             Text {
-                text: "date"
+                text: example.getDate()
                 anchors.horizontalCenter: parent.horizontalCenter
-            }
-
-            Image {
-                anchors.horizontalCenter: parent.horizontalCenter
-                width : 200
-                //height : 200
-                source : "image://fromPython" + entryField.text
             }
             TextField {
                 anchors.horizontalCenter: parent.horizontalCenter
                 id : entryField
                 width : 200
                 height : startButton.height
-                text : "write here"
+                text : "image caption"
+            }
+            Image {
+                anchors.horizontalCenter: parent.horizontalCenter
+                width : 200
+                height : 200
+                smooth : true
+                // NOTE: the image provider name in the Image.source URL is automatically lower-cased !!
+                source : "image://from_python/" + entryField.text
+                //source : "pyside.svg"
             }
             Button {
                 anchors.horizontalCenter: parent.horizontalCenter

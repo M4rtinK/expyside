@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 
 # A simple PySide example
+from PySide import QtCore, QtGui
 
 import sys
 import os
 from PySide.QtCore import QObject
 from PySide.QtGui import *
 from PySide.QtDeclarative import *
+import time
+import datetime
 
 WINDOW_TITLE = "PySide Example"
 
@@ -17,32 +20,74 @@ class PropertyExample(QObject):
   """
   Python property provider
   """
-  def __init__(self):
+  def __init__(self, rootObject):
     QObject.__init__(self)
+    self.rootObject = rootObject
+    #NOTE: the root object is needed only by Python properties
+    # that call QML code directly
+
+  @QtCore.Slot(result=str)
+  def getDate(self):
+    """
+    return current date & time
+    """
+    return str(datetime.datetime.now())
+
+  @QtCore.Slot(str)
+  def notify(self, text):
+    """
+    trigger a notification using the
+    Qt Quick Components InfoBanner
+    """
+
+    #NOTE: QML uses <br> instead of \n for linebreaks
+    self.rootObject.notify(text)
+
 
 
 class ImagesFromPython(QDeclarativeImageProvider):
   """
   Image provider example
   """
-  def __init__(self, gui):
+  def __init__(self):
     # this image provider supports QImage,
     # as specified by the ImageType
     QDeclarativeImageProvider.__init__(self, QDeclarativeImageProvider.ImageType.Image)
 
+  def requestImage(self, pathId, size, requestedSize):
+    # we ignore size & requested size for simplicity
+
+    # we use the path ID provided from the URL used
+    # in QML for a caption to paint on the image
+    text = pathId
+
+    # for an example image, PySide logo in SVG is used
+    image = QImage("pyside.svg")
+    image.scaled(requestedSize.width(),requestedSize.height())
+    painter = QtGui.QPainter(image)
+    painter.setPen("white")
+    painter.drawText(20, 20, text)
+    #image.save()
+    return image
+
 if __name__ == '__main__':
   app = QApplication(sys.argv) # create the application
   view = QDeclarativeView() # create the declarative view
-  view.setSource("main.qml")
-
   # add Python properties to the
   # QML root context
   rc = view.rootContext()
+  rootObject = view.rootObject()
   # add the example property
-  rc.setContextProperty("example", PropertyExample())
+  rc.setContextProperty("example", PropertyExample(rootObject))
 
   # register image providers
-  view.engine().addImageProviders().addImageProvider("fromPython", ImagesFromPython())
+  # NOTE: the image provider name in the Image.source URL is automatically lower-cased !!
+  provider = ImagesFromPython()
+  view.engine().addImageProvider("from_python", provider)
+  # NOTE2: view.engine().addImageProvider("from_python", ImagesFromPython())
+  # doesn't work for some reason
+
+  view.setSource("main.qml")
 
   view.setWindowTitle(WINDOW_TITLE)
   view.resize(854,480)
