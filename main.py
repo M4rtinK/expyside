@@ -67,7 +67,6 @@ class ImagesFromPython(QDeclarativeImageProvider):
     painter = QtGui.QPainter(image)
     painter.setPen("white")
     painter.drawText(20, 20, text)
-    #image.save()
     return image
 
 if __name__ == '__main__':
