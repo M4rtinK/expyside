@@ -86,11 +86,14 @@ if __name__ == '__main__':
   # NOTE2: view.engine().addImageProvider("from_python", ImagesFromPython())
   # doesn't work for some reason
 
+
+  view.setResizeMode(QDeclarativeView.SizeRootObjectToView)
   view.setSource("main.qml")
   rootObject = view.rootObject()
   property.rootObject = rootObject
 
   view.setWindowTitle(WINDOW_TITLE)
+  view.window().showFullScreen()
   view.resize(480,854)
   #view.resize(854,480)
   view.show()
