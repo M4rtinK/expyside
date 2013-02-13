@@ -8,30 +8,42 @@ import traceback
 
 # log to file on Android
 
-LOG_FOLDER = '/sdcard/pyqtlauncher'
-fSock = open(os.path.join(LOG_FOLDER, 'pyqt-log.txt'), 'w', 1)
+LOG_FOLDER = '/sdcard/'
+fSock = open(os.path.join(LOG_FOLDER, 'pyside_example_log.txt'), 'w', 0)
+rfSock = open(os.path.join(LOG_FOLDER, 'pyside_example_error_log.txt'), 'w', 0)
 sys.stdout = fSock
+sys.stderr = rfSock
 
 print("** stdout diverted to file **")
 
-os.environ['M_THEME_DIR'] = '/data/data/org.kde.necessitas.ministro/files/themes'
-
+# for some reason, the PySide bindings can't find the libshiboken.so and libshiboken,
+# even though they are in a directory in LD_LIBRARY_PATH, resulting in errors like this:
+#
+# ImportError: Cannot load library: link_image[1965]:   157 could not load needed library
+# 'libshiboken.so' for 'QtCore.so' (load_library[1120]: Library 'libshiboken.so' not found)
+#
+# if both are loaded to memory manually with ctypes, everything works fine
+print('manual libshiboken.so and libpyside.so loading')
 from ctypes import *
-PROJECT_FOLDER = '/data/data/org.modrana.PyQtLauncher'
+PROJECT_FOLDER = '/data/data/org.modrana.PySideExample'
 LIB_DIR = os.path.join(PROJECT_FOLDER, 'files/python/lib')
-SHIBOKEN_SO = os.path.join(LIB_DIR, 'libshiboken.so') 
+SHIBOKEN_SO = os.path.join(LIB_DIR, 'libshiboken.so')
 PYSIDE_SO = os.path.join(LIB_DIR, 'libpyside.so')
+print("path to libshiboken and libpyside:")
 print(SHIBOKEN_SO)
 print(PYSIDE_SO)
 shibok = CDLL(SHIBOKEN_SO)
 psde = CDLL(PYSIDE_SO)
-print("ctypes done")
+print("manual loading done")
 
+print("importing PySide")
 from PySide import QtCore, QtGui
 from PySide.QtCore import QObject
 from PySide.QtGui import *
 from PySide.QtDeclarative import *
 print("PySide import done")
+
+#print(os.environ)
 
 import datetime
 
@@ -119,7 +131,7 @@ def main():
 
   view.setWindowTitle(WINDOW_TITLE)
   # view.setResizeMode(QDeclarativeView.SizeRootObjectToView)
-  view.setResizeMode(QDeclarativeView.SizeViewToRootObject)
+  #view.setResizeMode(QDeclarativeView.SizeViewToRootObject)
   view.window().showFullScreen()
   # view.resize(480,854)
   #view.resize(854,480)
@@ -134,7 +146,7 @@ if __name__ == '__main__':
   try:
     main()
   except Exception:
-    fp = open(os.path.join(LOG_FOLDER, 'error.txt'), 'w', 1)
+    fp = open(os.path.join(LOG_FOLDER, 'pyside_example_exception_log.txt'), 'w', 0)
     traceback.print_exc(file=fp)
     fp.flush()
     fp.close()
