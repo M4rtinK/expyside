@@ -43,7 +43,7 @@ Window {
                 anchors.horizontalCenter: parent.horizontalCenter
                 id : entryField
                 width : 400
-                height : startButton.height
+                height : 52
                 text : "image caption"
             }
             Image {
