@@ -17,7 +17,7 @@ Window {
 
     Rectangle {
         id : greyBackground
-        color : "grey"
+        color : "lightgrey"
         anchors.fill : parent
     }
 
@@ -31,7 +31,7 @@ Window {
             anchors.fill : parent
             spacing : 16
             Text {
-                text: "<h1>PySide Example</h1>"
+                text: "<h1>PySide & QtC @ Android Example</h1>"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             Text {
@@ -49,14 +49,14 @@ Window {
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width : 300
-                height : 300
+                height : 157
                 smooth : true
                 // NOTE: the image provider name in the Image.source URL is automatically lower-cased !!
                 source : "image://from_python/" + entryField.text
             }
             Button {
                 anchors.horizontalCenter: parent.horizontalCenter
-                width : 200
+                width : 350
                 id : startButton
                 text : "notification"
                 onClicked : {

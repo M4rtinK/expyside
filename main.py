@@ -1,20 +1,45 @@
 #!/usr/bin/env python
 
 # A simple PySide example
-from PySide import QtCore, QtGui
 
 import sys
 import os
+import traceback
+
+# log to file on Android
+
+LOG_FOLDER = '/sdcard/pyqtlauncher'
+fSock = open(os.path.join(LOG_FOLDER, 'pyqt-log.txt'), 'w', 1)
+sys.stdout = fSock
+
+print("** stdout diverted to file **")
+
+os.environ['M_THEME_DIR'] = '/data/data/org.kde.necessitas.ministro/files/themes'
+
+from ctypes import *
+PROJECT_FOLDER = '/data/data/org.modrana.PyQtLauncher'
+LIB_DIR = os.path.join(PROJECT_FOLDER, 'files/python/lib')
+SHIBOKEN_SO = os.path.join(LIB_DIR, 'libshiboken.so') 
+PYSIDE_SO = os.path.join(LIB_DIR, 'libpyside.so')
+print(SHIBOKEN_SO)
+print(PYSIDE_SO)
+shibok = CDLL(SHIBOKEN_SO)
+psde = CDLL(PYSIDE_SO)
+print("ctypes done")
+
+from PySide import QtCore, QtGui
 from PySide.QtCore import QObject
 from PySide.QtGui import *
 from PySide.QtDeclarative import *
-import time
+print("PySide import done")
+
 import datetime
 
-WINDOW_TITLE = "PySide Example"
+WINDOW_TITLE = "PySide@Android Example"
 
 # enable running this program from absolute path
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+print("dir changed")
 
 class PropertyExample(QObject):
   """
@@ -62,14 +87,14 @@ class ImagesFromPython(QDeclarativeImageProvider):
     text = pathId
 
     # for an example image, PySide logo in SVG is used
-    image = QImage("pyside.svg")
+    image = QImage("pyside.png")
     image.scaled(requestedSize.width(),requestedSize.height())
     painter = QtGui.QPainter(image)
     painter.setPen("white")
     painter.drawText(20, 20, text)
     return image
 
-if __name__ == '__main__':
+def main():
   app = QApplication(sys.argv) # create the application
   view = QDeclarativeView() # create the declarative view
   # add Python properties to the
@@ -93,10 +118,30 @@ if __name__ == '__main__':
   property.rootObject = rootObject
 
   view.setWindowTitle(WINDOW_TITLE)
+  # view.setResizeMode(QDeclarativeView.SizeRootObjectToView)
+  view.setResizeMode(QDeclarativeView.SizeViewToRootObject)
   view.window().showFullScreen()
-  view.resize(480,854)
+  # view.resize(480,854)
   #view.resize(854,480)
   view.show()
   app.exec_()
+
+
+
+if __name__ == '__main__':
+  print("__main__")
+  fSock.flush()
+  try:
+    main()
+  except Exception:
+    fp = open(os.path.join(LOG_FOLDER, 'error.txt'), 'w', 1)
+    traceback.print_exc(file=fp)
+    fp.flush()
+    fp.close()
+    traceback.print_exc(file=fSock)
+    fSock.flush()
+  fSock.flush()
+  fSock.close()
+  exit(0)
 
 
