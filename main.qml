@@ -6,6 +6,8 @@ PageStackWindow {
     anchors.fill : parent
     id: rootWindow
     initialPage : mainPage
+    showStatusBar : false
+    showToolBar : true
 
     /* trigger notification
        with a given message */
