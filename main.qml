@@ -47,6 +47,7 @@ PageStackWindow {
                     text : "image caption"
                 }
                 Image {
+                    id : pysideImage
                     anchors.horizontalCenter: parent.horizontalCenter
                     width : 300
                     height : 157
@@ -73,7 +74,9 @@ PageStackWindow {
             visible: true
             ToolButton { text: "One" }
             ToolButton { text: "Two" }
-            ToolButton { text: "tools" }
+            ToolButton { text: "tools"
+                onClicked : toolsMenu.open()
+            }
             ToolIcon {
                 platformIconId: "toolbar-view-menu"
                 anchors.right: (parent === undefined) ? undefined : parent.right
@@ -89,6 +92,41 @@ PageStackWindow {
                 MenuItem { text: qsTr("Sample menu item 3") }
                 MenuItem { text: qsTr("Sample menu item 4") }
                 MenuItem { text: qsTr("Sample menu item 5") }
+            }
+        }
+
+        Menu {
+            id: toolsMenu
+            visualParent: pageStack
+            MenuLayout {
+                Label {
+                    text : "Image rotation"
+                }
+                Slider {
+                    stepSize : 1
+                    minimumValue : 0
+                    maximumValue : 360
+                    valueIndicatorVisible : true
+                    value : pysideImage.rotation
+                    onValueChanged : {
+                        pysideImage.rotation = value
+                    }
+
+
+                }
+                Label {
+                    text : "Image opacity"
+                }
+                Slider {
+                    stepSize : 0.01
+                    minimumValue : 0.0
+                    maximumValue : 1.0
+                    valueIndicatorVisible : true
+                    value : pysideImage.opacity
+                    onValueChanged : {
+                        pysideImage.opacity = value
+                    }
+                }
             }
         }
 
