@@ -71,9 +71,9 @@ PageStackWindow {
         ToolBarLayout {
             id: commonTools
             visible: true
-            ToolItem { iconId: "icon-m-toolbar-back"; onClicked: pageStack.pop(); }
             ToolButton { text: "One" }
             ToolButton { text: "Two" }
+            ToolButton { text: "tools" }
             ToolIcon {
                 platformIconId: "toolbar-view-menu"
                 anchors.right: (parent === undefined) ? undefined : parent.right
@@ -84,7 +84,11 @@ PageStackWindow {
             id: myMenu
             visualParent: pageStack
             MenuLayout {
-                MenuItem { text: qsTr("Sample menu item") }
+                MenuItem { text: qsTr("Sample menu item 1") }
+                MenuItem { text: qsTr("Sample menu item 2") }
+                MenuItem { text: qsTr("Sample menu item 3") }
+                MenuItem { text: qsTr("Sample menu item 4") }
+                MenuItem { text: qsTr("Sample menu item 5") }
             }
         }
 
