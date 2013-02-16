@@ -9,8 +9,8 @@ import traceback
 # log to file on Android
 
 LOG_FOLDER = '/sdcard/'
-fSock = open(os.path.join(LOG_FOLDER, 'pyside_example_log.txt'), 'w', 0)
-rfSock = open(os.path.join(LOG_FOLDER, 'pyside_example_error_log.txt'), 'w', 0)
+fSock = open(os.path.join(LOG_FOLDER, 'pyside_example_log.txt'), 'w', 1)
+rfSock = open(os.path.join(LOG_FOLDER, 'pyside_example_error_log.txt'), 'w', 1)
 sys.stdout = fSock
 sys.stderr = rfSock
 
@@ -152,6 +152,8 @@ if __name__ == '__main__':
     fp.close()
     traceback.print_exc(file=fSock)
     fSock.flush()
+  rfSock.flush()
+  rfSock.close()
   fSock.flush()
   fSock.close()
   exit(0)
