@@ -25,7 +25,10 @@ print("** stdout diverted to file **")
 # if both are loaded to memory manually with ctypes, everything works fine
 print('manual libshiboken.so and libpyside.so loading')
 from ctypes import *
-PROJECT_FOLDER = '/data/data/org.modrana.PySideExample'
+#PROJECT_FOLDER = '/data/data/org.modrana.PySideExample'
+
+# PYSIDE_APPLICATION_FOLDER is set in main.h in the Example project
+PROJECT_FOLDER = os.environ['PYSIDE_APPLICATION_FOLDER']
 LIB_DIR = os.path.join(PROJECT_FOLDER, 'files/python/lib')
 SHIBOKEN_SO = os.path.join(LIB_DIR, 'libshiboken.so')
 PYSIDE_SO = os.path.join(LIB_DIR, 'libpyside.so')
